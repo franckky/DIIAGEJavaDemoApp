@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater,container,false);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewmodel(viewModel);
 
         return binding.getRoot();
@@ -43,6 +44,14 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(this,getDefaultViewModelProviderFactory()).get(HomeViewModel.class);
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.getNumberOfQuotes().observe(getViewLifecycleOwner(), number -> {
+            binding.txtNumberOfQuotes.setText(number);
+        });
     }
 
 
